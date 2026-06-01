@@ -3,6 +3,8 @@ package mx.edu.tecdesoftware.market_backend.persistence.entity;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Entity
 @Table (name = "clientes")
 
@@ -20,6 +22,10 @@ public class Cliente {
 
     @Column (name = "correo_electronico")
     private String correoElectronico;
+
+    //Un cliente ouede tener muchas compras
+    @OneToMany(mappedBy = "cliente")
+    private List<Compra> compras;
 
     public Integer getIdCliente() {
         return idCliente;

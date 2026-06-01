@@ -1,6 +1,8 @@
 package mx.edu.tecdesoftware.market_backend.persistence.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 @Entity
@@ -13,11 +15,12 @@ public class Categoria {
     @Column (name ="id_categoria")
     private Integer idCategoria;
 
-
     private String descripcion;
 
-
     private Boolean estado;
+
+    @OneToMany(mappedBy = "categoria")
+    private List<Producto> productos;
 
     public Boolean getEstado() {
         return estado;
