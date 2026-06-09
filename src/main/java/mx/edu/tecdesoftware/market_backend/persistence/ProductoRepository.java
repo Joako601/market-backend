@@ -5,6 +5,7 @@ import mx.edu.tecdesoftware.market_backend.domain.repository.ProductRepository;
 import mx.edu.tecdesoftware.market_backend.persistence.crud.ProductoCrudRepository;
 import mx.edu.tecdesoftware.market_backend.persistence.entity.Producto;
 import mx.edu.tecdesoftware.market_backend.persistence.mapper.ProductMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,8 +15,10 @@ import java.util.Optional;
 //Le dices a spring que esta clase se comunicara con la BD
 public class ProductoRepository implements ProductRepository {
 
+    @Autowired
     private ProductoCrudRepository productoCrudRepository;
 
+    @Autowired //para hacer la inyeccion de dependencias
     private ProductMapper productMapper;
 
     //SELECT * FROM productos
