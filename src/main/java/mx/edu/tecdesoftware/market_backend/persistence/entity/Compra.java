@@ -99,4 +99,7 @@ public class Compra {
     public void setProductos(List<CompraProducto> productos) {
         this.productos = productos;
     }
+
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
+    private List<CompraProducto> productos;
 }
