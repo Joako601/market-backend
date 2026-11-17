@@ -27,7 +27,10 @@ public class ComprasRepository implements PurchaseRepository {
 
     @Override
     public Optional<List<Purchase>> getByClient(String clientId) {
-        return Optional.of(mapper.toPurchases(compraCrudRepository.findByIdCliente(clientId)));
+        List<Compra> compras = compraCrudRepository.findByIdCliente(clientId);
+        // Lista vacía -> Optional.empty() para que el controlador responda 404
+        if (compras.isEmpty()) return Optional.empty();
+        return Optional.of(mapper.toPurchases(compras));
     }
 
     @Override

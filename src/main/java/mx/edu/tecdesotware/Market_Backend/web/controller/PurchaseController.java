@@ -23,7 +23,7 @@ public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
 
-    @GetMapping("")
+    @GetMapping("/all")
     @Operation(summary = "Get all purchases",
             description = "Return a list of all purchases")
     @ApiResponse(responseCode = "200", description = "Purchases successfully retrieved")
@@ -36,7 +36,7 @@ public class PurchaseController {
     @Operation(summary = "Get purchases by client",
             description = "Return a list of purchases by client ID if it exists")
     @ApiResponse(responseCode = "200", description = "Purchases found")
-    @ApiResponse(responseCode = "404", description = "Purchases not found")
+    @ApiResponse(responseCode = "404", description = "The client has no purchases")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<List<Purchase>> getByClient(
             @Parameter(description = "ID of the client", example = "4546221", required = true)
@@ -80,10 +80,7 @@ public class PurchaseController {
             )
     )
     @ApiResponse(responseCode = "201", description = "Purchase created successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid purchase data")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @ApiResponse(responseCode = "403", description = "Forbidden")
-    @ApiResponse(responseCode = "409", description = "Purchase conflict (duplicate purchase)")
+    @ApiResponse(responseCode = "400", description = "Invalid purchase data (e.g. clientId or productId does not exist)")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<Purchase> save(@RequestBody Purchase purchase) {
         return new ResponseEntity<>(purchaseService.save(purchase), HttpStatus.CREATED);

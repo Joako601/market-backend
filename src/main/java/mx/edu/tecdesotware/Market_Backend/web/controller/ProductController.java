@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mx.edu.tecdesotware.Market_Backend.domain.Product;
-import mx.edu.tecdesotware.Market_Backend.domain.repository.ProductRepository;
 import mx.edu.tecdesotware.Market_Backend.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +22,6 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @GetMapping("")
     @Operation(summary = "Get all products",
@@ -87,10 +83,7 @@ public class ProductController {
             )
     )
     @ApiResponse(responseCode = "201", description = "Product created successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid product data")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @ApiResponse(responseCode = "403", description = "Forbidden")
-    @ApiResponse(responseCode = "409", description = "Product conflict (duplicate code or SKU)")
+    @ApiResponse(responseCode = "400", description = "Invalid product data (e.g. categoryId does not exist)")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<Product> save(@RequestBody Product product) {
         return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
@@ -100,9 +93,6 @@ public class ProductController {
     @Operation(summary = "Delete a product by ID",
             description = "Delete a product if it exists")
     @ApiResponse(responseCode = "200", description = "Product deleted successfully")
-    @ApiResponse(responseCode = "400", description = "Invalid product ID")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Product not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<Product> delete(

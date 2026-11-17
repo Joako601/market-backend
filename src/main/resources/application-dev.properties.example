@@ -1,0 +1,8 @@
+# Copia este archivo como application-dev.properties y pon tus datos de PostgreSQL.
+# application-dev.properties está en .gitignore, así que la contraseña no se sube.
+server.port=8090
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/market
+spring.datasource.username=postgres
+spring.datasource.password=CAMBIA_ESTO
+spring.datasource.driver-class-name=org.postgresql.Driver

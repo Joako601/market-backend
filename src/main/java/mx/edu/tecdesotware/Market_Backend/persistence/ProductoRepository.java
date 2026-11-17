@@ -27,6 +27,8 @@ public class ProductoRepository implements ProductRepository {
 
     public Optional<List<Product>> getByCategory(int categoryId){
         List<Producto> productos = productoCrudRepository.findByIdCategoriaOrderByNombreAsc(categoryId);
+        // Lista vacía -> Optional.empty() para que el controlador responda 404
+        if (productos.isEmpty()) return Optional.empty();
         return Optional.of(productMapper.toProducts(productos));
     }
 
