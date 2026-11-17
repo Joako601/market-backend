@@ -1,6 +1,7 @@
 package mx.edu.tecdesotware.Market_Backend.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,38 +26,21 @@ public class PurchaseController {
     @GetMapping("")
     @Operation(summary = "Get all purchases",
             description = "Return a list of all purchases")
-    @ApiResponse(
-            responseCode = "200",
-                description = "Purchases succesfully retrieved"
-    )
-    @ApiResponse(
-            responseCode = "404",
-            description = "Purchases not found"
-    )
-    @ApiResponse(
-            responseCode = "500",
-            description = "Internal server error"
-    )
+    @ApiResponse(responseCode = "200", description = "Purchases successfully retrieved")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<List<Purchase>> getAll() {
         return new ResponseEntity<>(purchaseService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/client/{idClient}")
-    @Operation(summary = "Get a puchases by its client",
-            description = "Return a list of purchases by its client ID if it exists")
-    @ApiResponse(
-            responseCode = "200",
-            description = "Purchases found"
-    )
-    @ApiResponse(
-            responseCode = "404",
-            description = "Purchases not found"
-    )
-    @ApiResponse(
-            responseCode = "500",
-            description = "Internal server error"
-    )
-    public ResponseEntity<List<Purchase>> getByClient(@PathVariable("idClient") String clientId) {
+    @Operation(summary = "Get purchases by client",
+            description = "Return a list of purchases by client ID if it exists")
+    @ApiResponse(responseCode = "200", description = "Purchases found")
+    @ApiResponse(responseCode = "404", description = "Purchases not found")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
+    public ResponseEntity<List<Purchase>> getByClient(
+            @Parameter(description = "ID of the client", example = "4546221", required = true)
+            @PathVariable("idClient") String clientId) {
         return purchaseService.getByClient(clientId)
                 .map(purchases -> new ResponseEntity<>(purchases, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -64,31 +48,33 @@ public class PurchaseController {
 
     @PostMapping("/save")
     @Operation(
-            summary = "Save a new purchases",
-            description = "Register a new purchase and return the created purchase",
+            summary = "Save a new purchase",
+            description = "Register a new purchase with its items and return the created purchase. "
+                    + "Do not send 'purchaseId', the database generates it. "
+                    + "'clientId' and every 'productId' must already exist.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(
-                                    name = "Example purchases",
+                                    name = "Example purchase",
                                     value = """
-                                {
-                                  "clientId": "4546221",
-                                  "date": "2026-07-16T14:33:37.335Z",
-                                  "paymentMethod": "E",
-                                  "comment": "Compra",
-                                  "status": "T",
-                                  "items": [
-                                    {
-                                      "productId": 4,
-                                      "quantity": 1,
-                                      "price": 0.1,
-                                      "status": true
-                                    }
-                                  ]
-                                }
-                                """
+                                            {
+                                              "clientId": "4546221",
+                                              "date": "2026-07-16T14:33:37",
+                                              "paymentMethod": "E",
+                                              "comment": "Compra",
+                                              "state": "P",
+                                              "items": [
+                                                {
+                                                  "productId": 4,
+                                                  "quantity": 1,
+                                                  "total": 20,
+                                                  "active": true
+                                                }
+                                              ]
+                                            }
+                                            """
                             )
                     )
             )
@@ -97,7 +83,7 @@ public class PurchaseController {
     @ApiResponse(responseCode = "400", description = "Invalid purchase data")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
-    @ApiResponse(responseCode = "409", description = "Purchase conflict (duplicate code)")
+    @ApiResponse(responseCode = "409", description = "Purchase conflict (duplicate purchase)")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<Purchase> save(@RequestBody Purchase purchase) {
         return new ResponseEntity<>(purchaseService.save(purchase), HttpStatus.CREATED);
