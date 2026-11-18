@@ -1,0 +1,45 @@
+name: Bug report
+description: Something in the API returns the wrong result or fails.
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Release tag or commit SHA.
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Java version, PostgreSQL version and OS.
+      placeholder: Java 21.0.5, PostgreSQL 17.2, Ubuntu 24.04
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The request you sent. A curl command is ideal.
+      placeholder: |
+        curl -X POST http://localhost:8090/purchases/save \
+          -H 'Content-Type: application/json' \
+          -d '{"clientId": "4546221", "items": []}'
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Status code, response body and any stack trace from the server log.
+    validations:
+      required: true
