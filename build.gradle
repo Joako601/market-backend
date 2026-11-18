@@ -5,7 +5,8 @@ plugins {
 }
 
 group = 'mx.edu.tecdesotware'
-version = '0.0.1-SNAPSHOT'
+// release-please bumps version.txt; do not edit it by hand.
+version = file('version.txt').text.trim()
 
 java {
 	toolchain {
