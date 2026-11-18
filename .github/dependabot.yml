@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # One PR per week for all minor and patch bumps; majors arrive separately.
+      gradle-minor-and-patch:
+        update-types: [minor, patch]
+    # fix(deps) makes release-please cut a patch release, so dependency updates ship.
+    commit-message:
+      prefix: fix
+      include: scope
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+      include: scope

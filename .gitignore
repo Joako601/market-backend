@@ -15,7 +15,8 @@ logs/
 *.local.properties
 application-local.yml
 application-local.properties
-*.properties
+# Profile configs hold real credentials. Only the .example templates are committed.
+application-*.properties
 
 ### STS ###
 .apt_generated
@@ -67,3 +68,6 @@ Desktop.ini
 *.bak
 *.tmp
 
+
+### Claude Code ###
+.claude/
